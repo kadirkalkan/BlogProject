@@ -20,7 +20,7 @@ namespace Blog.Controllers
 
         public IActionResult Index()
         {
-            return View(_context.Users.First());
+            return View();
         }
 
         public IActionResult Privacy()

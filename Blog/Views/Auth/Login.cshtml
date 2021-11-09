@@ -16,6 +16,10 @@
                 <h2 style="margin:0px;">Log In</h2>
             </div>
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            @if (TempData["message"] != null)
+            {
+                <div class="text-success">@TempData["message"]</div>
+            }
             <!-- Login Form -->
             <form method="post" asp-controller="Auth" asp-action="Login">
                 <input asp-for="Username" class="fadeIn second" placeholder="login">

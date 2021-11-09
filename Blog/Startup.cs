@@ -1,6 +1,7 @@
 using Blog.Models.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -26,7 +27,11 @@ namespace Blog
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
-
+            // Session Kullanmak Ýçin Öncelikle Projeye Session Ekliyoruz
+            services.AddSession();
+            // View Tarafýnda Session'lara Eriþebilmek için Inject methodunu kullanarak HttpContext objesine eriþmek istiyoruz bu konuda bize yardýmcý olacak 
+            // HtttpContextAccessor class'ýný Dependency Injection için ayarlýyoruz.
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddDbContext<DatabaseContext>(options => options.UseSqlServer(Configuration.GetConnectionString("conString")));
         }
 
@@ -49,7 +54,8 @@ namespace Blog
             app.UseRouting();
 
             app.UseAuthorization();
-
+            // Projeme Eklediðim Session'ý Kullanabilme Becerisini Framework'un Aktif Etmesini Ýstiyoruz
+            app.UseSession();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(

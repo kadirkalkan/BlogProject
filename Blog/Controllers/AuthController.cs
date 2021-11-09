@@ -2,6 +2,7 @@
 using Blog.Models.Entity;
 using Blog.ViewModels.Auth.Login;
 using Blog.ViewModels.Auth.Register;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -31,6 +32,7 @@ namespace Blog.Controllers
             if (ModelState.IsValid) { 
                 if(_context.Users.Any(x=> x.Username.Equals(user.Username) && x.Password.Equals(user.Password)))
                 {
+                    HttpContext.Session.SetString("user", user.Username);
                     return RedirectToAction("Index", "Home");
                 } else
                 {
@@ -40,6 +42,11 @@ namespace Blog.Controllers
             return View();
         }
 
+        public IActionResult LogOut()
+        {
+            HttpContext.Session.Remove("user");
+            return RedirectToAction("Login", "Auth");
+        }
 
         public IActionResult Register()
         {
@@ -51,7 +58,18 @@ namespace Blog.Controllers
         {
             if (ModelState.IsValid)
             {
-              
+                if (!_context.Users.Any(x => x.Username.Equals(user.Username)))
+                {
+                    var newUser = new User(user.Username, user.Password);
+                    _context.Users.Add(newUser);
+                    _context.SaveChanges();
+                    TempData["message"] = "Başarıyla Kayıt Olundu.";
+                    return RedirectToAction("Login", "Auth");
+                }
+                else
+                {
+                    ModelState.AddModelError("", "Böyle Bir Kullanıcı Zaten Mevcut");
+                }
             }
             return View();
         }
