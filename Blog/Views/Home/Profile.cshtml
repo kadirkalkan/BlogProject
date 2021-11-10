@@ -1,0 +1,54 @@
+﻿@model List<ArticleViewModel>
+@{
+    ViewData["Title"] = "Profile";
+}
+
+<link href="~/css/article-list.css" rel="stylesheet" />
+
+<div class="container">
+    <h2 class="text-center">Last Articles</h2>
+    @if (TempData["message"] != null)
+    {
+        <div class="text-success">@TempData["message"]</div>
+    }
+    <div style="float:right"><a class="btn btn-success" asp-controller="Article" asp-action="Create">Yeni</a></div>
+    <br />
+    <br />
+    @if (Model is null || Model.Count == 0)
+    {
+        <h2 class="text-center article-panel brick">THERE ISN'T ANY DATA</h2>
+    }
+    else
+    {
+        foreach (ArticleViewModel article in Model)
+        {
+            <div class="row mb-2 p-1 article-panel">
+                <div class="col col-9">
+                    <div class="row">
+                        <div class="col col-4">
+                            <div class="row"><b>Author : </b> &nbsp; @article.AuthorName</div>
+                            <div class="row">
+                                <img src="~/images/@article.ArticlePicture" alt="Alternate Text" style="object-fit: contain; max-width: 200px; max-height: 150px;" />
+                            </div>
+                        </div>
+                        <div class="col col-8">
+                            <a href="#" class="black action">
+                                <div class="row"><b>Title : </b> &nbsp; @article.Title</div>
+                                <div class="row"><b>Content : </b> &nbsp; @article.Content </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col col-3">
+                    <div class="row float-right"><b>Created At : </b> &nbsp; 10.11.2021 </div>
+                    <br />
+                    <div class="row float-right mt-5 mr-4">
+                        <a class="btn btn-sm btn-warning" asp-action="EditArticle" asp-route-id="@article.Id"><i class="far fa-edit"></i></a>
+                        <a class="btn btn-sm btn-danger ml-2" asp-controller="Data" asp-action="DeleteArticle" asp-route-id="@article.Id"><i class="fas fa-ban"></i></a>
+                    </div>
+                </div>
+            </div>
+        }
+    }
+</div>
+

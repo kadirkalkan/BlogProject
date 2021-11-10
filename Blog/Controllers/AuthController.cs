@@ -27,12 +27,14 @@ namespace Blog.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Login(LoginViewModel user) 
+        public IActionResult Login(LoginViewModel model) 
         {
-            if (ModelState.IsValid) { 
-                if(_context.Users.Any(x=> x.Username.Equals(user.Username) && x.Password.Equals(user.Password)))
+            if (ModelState.IsValid) {
+                var user = _context.Users.FirstOrDefault(x => x.Username.Equals(model.Username) && x.Password.Equals(model.Password));
+                if(user is not null)
                 {
-                    HttpContext.Session.SetString("user", user.Username);
+                    HttpContext.Session.SetString("userId", user.Id.ToString());
+                    HttpContext.Session.SetString("username", user.Username);
                     return RedirectToAction("Index", "Home");
                 } else
                 {

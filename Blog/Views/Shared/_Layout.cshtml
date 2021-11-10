@@ -8,6 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - Blog</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta2/css/all.min.css" integrity="sha512-YWzhKL2whUzgiheMoBFwW8CKV4qpHQAEuvilg9FAn5VJUDwKZZxkJNuGM4XkWuk94WCrrwslk8yWNGmY1EduTA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
 </head>
@@ -31,10 +32,13 @@
 
                     </ul>
                     <ul class="navbar-nav">
-                        @if (HttpContextAccessor.HttpContext.Session.GetString("user") != null)
+                        @if (HttpContextAccessor.HttpContext.Session.GetString("username") != null)
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Auth" asp-action="LogOut">Log Out (@HttpContextAccessor.HttpContext.Session.GetString("user"))</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Profile">Profile</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Auth" asp-action="LogOut">Log Out (@HttpContextAccessor.HttpContext.Session.GetString("username"))</a>
                             </li>
                         }
                         else
