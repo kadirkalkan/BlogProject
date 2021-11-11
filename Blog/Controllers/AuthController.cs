@@ -20,14 +20,16 @@ namespace Blog.Controllers
             _context = context;
         }
 
-        public IActionResult Login()
+        [HttpGet]
+        public IActionResult Login(string yonlen)
         {
+            ViewBag.yonlen = yonlen;
             return View();
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Login(LoginViewModel model) 
+        public IActionResult Login(LoginViewModel model, string yonlen) 
         {
             if (ModelState.IsValid) {
                 var user = _context.Users.FirstOrDefault(x => x.Username.Equals(model.Username) && x.Password.Equals(model.Password));
@@ -35,7 +37,13 @@ namespace Blog.Controllers
                 {
                     HttpContext.Session.SetString("userId", user.Id.ToString());
                     HttpContext.Session.SetString("username", user.Username);
-                    return RedirectToAction("Index", "Home");
+                    if(string.IsNullOrEmpty(yonlen))
+                    {
+                        return RedirectToAction("Index", "Home");
+                    } else
+                    {
+                        return Redirect(yonlen);
+                    }
                 } else
                 {
                     ModelState.AddModelError("", "Böyle Bir Kullanıcı Bulunamadı");
@@ -46,7 +54,8 @@ namespace Blog.Controllers
 
         public IActionResult LogOut()
         {
-            HttpContext.Session.Remove("user");
+            HttpContext.Session.Remove("userId");
+            HttpContext.Session.Remove("username");
             return RedirectToAction("Login", "Auth");
         }
 

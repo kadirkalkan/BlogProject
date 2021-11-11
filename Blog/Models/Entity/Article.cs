@@ -19,6 +19,9 @@ namespace Blog.Models.Entity
         public string Content { get; set; }
         public string ArticlePicture { get; set; }
 
+        [Required]
+        public DateTime CreatedTime { get; set; } = DateTime.Now;
+
         [ForeignKey("Author")]
         public int AuthorId { get; set; }
 

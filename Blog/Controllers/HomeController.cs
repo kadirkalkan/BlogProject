@@ -1,4 +1,5 @@
-﻿using Blog.Models;
+﻿using Blog.Filters;
+using Blog.Models;
 using Blog.Models.Data;
 using Blog.ViewModels.Home.Profile;
 using Microsoft.AspNetCore.Http;
@@ -25,16 +26,18 @@ namespace Blog.Controllers
             return View();
         }
 
+        [LoggedUser]
         public IActionResult Privacy()
         {
             return View();
         }
 
-        public IActionResult Profile()
+        [HttpGet("[action]/{username}")]
+        public IActionResult Profile(string username)
         {
             List<ArticleViewModel> list =
                 _context.Articles
-                .Where(x => x.AuthorId.ToString().Equals(HttpContext.Session.GetString("userId")))
+                .Where(x => x.Author.Username.Equals(username))
                 .Select(x => new ArticleViewModel()
                 {
                     Id = x.Id,
@@ -43,7 +46,7 @@ namespace Blog.Controllers
                     ArticlePicture = x.ArticlePicture,
                     Title = x.Title,
                     Content = x.Content,
-                    // todo CreatedTime Eklenecek.
+                    CreatedTime = x.CreatedTime
                 }).ToList();
             return View(list);
         }

@@ -23,6 +23,8 @@ namespace Blog.Models.Data
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.Entity<User>().HasData(new User(1, "kadir", "123456789"));
+
+            modelBuilder.Entity<Article>().Property(x => x.CreatedTime).HasDefaultValueSql("getutcdate()");
         }
     }
 }

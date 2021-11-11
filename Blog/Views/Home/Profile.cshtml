@@ -1,8 +1,10 @@
-﻿@model List<ArticleViewModel>
+﻿@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+
+@model List<ArticleViewModel>
 @{
     ViewData["Title"] = "Profile";
 }
-
+  
 <link href="~/css/article-list.css" rel="stylesheet" />
 
 <div class="container">
@@ -11,7 +13,11 @@
     {
         <div class="text-success">@TempData["message"]</div>
     }
-    <div style="float:right"><a class="btn btn-success" asp-controller="Article" asp-action="Create">Yeni</a></div>
+
+    @if (!string.IsNullOrEmpty(HttpContextAccessor.HttpContext.Session.GetString("userId")))
+    {
+        <div style="float:right"><a class="btn btn-success" asp-controller="Article" asp-action="Create">Yeni</a></div>
+    }
     <br />
     <br />
     @if (Model is null || Model.Count == 0)
@@ -34,17 +40,20 @@
                         <div class="col col-8">
                             <a href="#" class="black action">
                                 <div class="row"><b>Title : </b> &nbsp; @article.Title</div>
-                                <div class="row"><b>Content : </b> &nbsp; @article.Content </div>
+                                <div class="row"><b>Content : </b> &nbsp; @article.GetContentSummary() </div>
                             </a>
                         </div>
                     </div>
                 </div>
                 <div class="col col-3">
-                    <div class="row float-right"><b>Created At : </b> &nbsp; 10.11.2021 </div>
+                    <div class="row float-right"><b>Created At : </b> &nbsp; @article.GetCreatedTime() </div>
                     <br />
                     <div class="row float-right mt-5 mr-4">
-                        <a class="btn btn-sm btn-warning" asp-action="EditArticle" asp-route-id="@article.Id"><i class="far fa-edit"></i></a>
-                        <a class="btn btn-sm btn-danger ml-2" asp-controller="Data" asp-action="DeleteArticle" asp-route-id="@article.Id"><i class="fas fa-ban"></i></a>
+                        @if (article.AuthorId.ToString().Equals(HttpContextAccessor.HttpContext.Session.GetString("userId")))
+                        {
+                            <a class="btn btn-sm btn-warning" asp-action="EditArticle" asp-route-id="@article.Id"><i class="far fa-edit"></i></a>
+                            <a class="btn btn-sm btn-danger ml-2" asp-controller="Data" asp-action="DeleteArticle" asp-route-id="@article.Id"><i class="fas fa-ban"></i></a>
+                        }
                     </div>
                 </div>
             </div>

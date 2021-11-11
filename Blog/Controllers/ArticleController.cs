@@ -1,4 +1,5 @@
-﻿using Blog.Managers;
+﻿using Blog.Filters;
+using Blog.Managers;
 using Blog.Models.Data;
 using Blog.Models.Entity;
 using Blog.ViewModels.Article.Create;
@@ -22,6 +23,9 @@ namespace Blog.Controllers
             _fileManager = new FileManager(webHostEnvironment);
             _context = context;
         }
+
+
+        [LoggedUser]
         public IActionResult Create()
         {
             return View();
@@ -44,7 +48,7 @@ namespace Blog.Controllers
                 _context.SaveChanges();
             }
             TempData["message"] = "Tebrikler Article Oluşturma Başarılı.";
-            return RedirectToAction("Profile", "Home");
+            return RedirectToAction("Profile", "Home", new { username= HttpContext.Session.GetString("username") });
         }
     }
 }

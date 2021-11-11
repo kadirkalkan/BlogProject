@@ -21,7 +21,7 @@
                 <div class="text-success">@TempData["message"]</div>
             }
             <!-- Login Form -->
-            <form method="post" asp-controller="Auth" asp-action="Login">
+            <form method="post" asp-controller="Auth" asp-action="Login" asp-route-yonlen="@ViewBag.yonlen">
                 <input asp-for="Username" class="fadeIn second" placeholder="login">
                 <br />
                 <span asp-validation-for="Username" class="text-danger"></span>
