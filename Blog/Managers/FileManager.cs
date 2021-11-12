@@ -16,7 +16,7 @@ namespace Blog.Managers
             _webHostEnvironment = webHostEnvironment;
         }
 
-        public string GetUniqueNameAndSavePhotoToDisk(IFormFile pictureFile) 
+        public string GetUniqueNameAndSavePhotoToDisk(IFormFile pictureFile)
         {
             string uniqueFileName = default;
 
@@ -35,6 +35,19 @@ namespace Blog.Managers
 
             return uniqueFileName;
         }
+
+
+        public void RemoveImageFromDisk(string imageName)
+        {
+            if (!string.IsNullOrEmpty(imageName))
+            {
+                string uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "images");
+                string filePath = Path.Combine(uploadsFolder, imageName);
+                System.IO.File.Delete(filePath);
+            }
+        }
+
+
 
     }
 }

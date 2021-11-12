@@ -13,6 +13,10 @@
     {
         <div class="text-success">@TempData["message"]</div>
     }
+    @if (TempData["error"] != null)
+    {
+        <div class="text-danger">@TempData["error"]</div>
+    }
 
     @if (!string.IsNullOrEmpty(HttpContextAccessor.HttpContext.Session.GetString("userId")))
     {
@@ -51,8 +55,8 @@
                     <div class="row float-right mt-5 mr-4">
                         @if (article.AuthorId.ToString().Equals(HttpContextAccessor.HttpContext.Session.GetString("userId")))
                         {
-                            <a class="btn btn-sm btn-warning" asp-action="EditArticle" asp-route-id="@article.Id"><i class="far fa-edit"></i></a>
-                            <a class="btn btn-sm btn-danger ml-2" asp-controller="Data" asp-action="DeleteArticle" asp-route-id="@article.Id"><i class="fas fa-ban"></i></a>
+                            <a class="btn btn-sm btn-warning" asp-controller="Article" asp-action="Edit" asp-route-id="@article.Id"><i class="far fa-edit"></i></a>
+                            <a class="btn btn-sm btn-danger ml-2" asp-controller="Article" asp-action="Delete" asp-route-id="@article.Id"><i class="fas fa-ban"></i></a>
                         }
                     </div>
                 </div>

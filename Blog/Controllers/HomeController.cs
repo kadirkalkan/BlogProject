@@ -43,7 +43,7 @@ namespace Blog.Controllers
                     Id = x.Id,
                     AuthorId = x.AuthorId.ToString(),
                     AuthorName = x.Author.Username,
-                    ArticlePicture = x.ArticlePicture,
+                    ArticlePicture = string.IsNullOrEmpty(x.ArticlePicture) ? "null.png" : x.ArticlePicture,
                     Title = x.Title,
                     Content = x.Content,
                     CreatedTime = x.CreatedTime
