@@ -5,8 +5,7 @@
 
 <h2>Create Article</h2>
 <hr />
-<form asp-controller="Article" asp-action="Create" enctype="multipart/form-data">
-
+<form asp-controller="Article" asp-action="Create" enctype="multipart/form-data" asp-route-yonlen="@ViewBag.yonlen">
     <div class="row">
         <div class="col-sm-12">
             <div class="form-group">

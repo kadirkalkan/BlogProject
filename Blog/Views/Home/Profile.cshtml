@@ -20,7 +20,7 @@
 
     @if (!string.IsNullOrEmpty(HttpContextAccessor.HttpContext.Session.GetString("userId")))
     {
-        <div style="float:right"><a class="btn btn-success" asp-controller="Article" asp-action="Create">Yeni</a></div>
+        <div style="float:right"><a class="btn btn-success" asp-controller="Article" asp-action="Create" asp-route-yonlen="/Home/Profile/@HttpContextAccessor.HttpContext.Session.GetString("username")">Yeni</a></div>
     }
     <br />
     <br />
@@ -42,7 +42,7 @@
                             </div>
                         </div>
                         <div class="col col-8">
-                            <a href="#" class="black action">
+                            <a asp-controller="Home" asp-action="Overview" asp-route-id="@article.Id" class="black action">
                                 <div class="row"><b>Title : </b> &nbsp; @article.Title</div>
                                 <div class="row"><b>Content : </b> &nbsp; @article.GetContentSummary() </div>
                             </a>

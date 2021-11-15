@@ -14,6 +14,7 @@ using System.Threading.Tasks;
 
 namespace Blog.Controllers
 {
+    [LoggedUser]
     public class ArticleController : Controller
     {
         private readonly FileManager _fileManager;
@@ -25,16 +26,16 @@ namespace Blog.Controllers
             _context = context;
         }
 
-
-        [LoggedUser]
-        public IActionResult Create()
+        [HttpGet]
+        public IActionResult Create(string yonlen)
         {
+            ViewBag.yonlen = yonlen;
             return View();
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(CreateViewModel model)
+        public IActionResult Create(CreateViewModel model, string yonlen)
         {
             if (ModelState.IsValid)
             {
@@ -47,15 +48,15 @@ namespace Blog.Controllers
                 };
                 _context.Articles.Add(article);
                 _context.SaveChanges();
-             TempData["message"] = "Article Created.";
-            return RedirectToAction("Profile", "Home", new { username = HttpContext.Session.GetString("username") });
-            } else
+                TempData["message"] = "Article Created.";
+                return Redirect(yonlen);
+            }
+            else
             {
                 return View(model);
             }
         }
 
-        [LoggedUser]
         public IActionResult Edit(int id)
         {
             var article = _context.Articles.FirstOrDefault(x => x.Id.Equals(id) && x.AuthorId.ToString().Equals(HttpContext.Session.GetString("userId")));
@@ -100,7 +101,6 @@ namespace Blog.Controllers
         }
 
         [HttpGet]
-        [LoggedUser]
         public IActionResult Delete(int id)
         {
             var article = _context.Articles.FirstOrDefault(x => x.Id.Equals(id) && x.AuthorId.ToString().Equals(HttpContext.Session.GetString("userId")));

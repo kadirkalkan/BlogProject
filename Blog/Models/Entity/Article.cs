@@ -26,6 +26,6 @@ namespace Blog.Models.Entity
         public int AuthorId { get; set; }
 
         [Required]
-        public User Author { get; set; }
+        public virtual User Author { get; set; }
     }
 }
