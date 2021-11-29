@@ -29,9 +29,6 @@ namespace Blog
             services.AddControllersWithViews();
             // Session Kullanmak Ýçin Öncelikle Projeye Session Ekliyoruz
             services.AddSession();
-            // View Tarafýnda Session'lara Eriþebilmek için Inject methodunu kullanarak HttpContext objesine eriþmek istiyoruz bu konuda bize yardýmcý olacak 
-            // HtttpContextAccessor class'ýný Dependency Injection için ayarlýyoruz.
-            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddDbContext<DatabaseContext>(options => options.UseSqlServer(Configuration.GetConnectionString("conString")));
         }
 

@@ -17,13 +17,12 @@ namespace Blog.Controllers
     [LoggedUser]
     public class ArticleController : Controller
     {
-        private readonly FileManager _fileManager;
         private readonly DatabaseContext _context;
-
+        private readonly IWebHostEnvironment _webHostEnvironment;
         public ArticleController(IWebHostEnvironment webHostEnvironment, DatabaseContext context)
         {
-            _fileManager = new FileManager(webHostEnvironment);
             _context = context;
+            _webHostEnvironment = webHostEnvironment;
         }
 
         [HttpGet]
@@ -44,7 +43,7 @@ namespace Blog.Controllers
                     Title = model.Title,
                     Content = model.Content,
                     AuthorId = int.Parse(HttpContext.Session.GetString("userId")),
-                    ArticlePicture = _fileManager.GetUniqueNameAndSavePhotoToDisk(model.ArticlePicture)
+                    ArticlePicture = model.ArticlePicture.GetUniqueNameAndSavePhotoToDisk(_webHostEnvironment)
                 };
                 _context.Articles.Add(article);
                 _context.SaveChanges();
@@ -86,10 +85,11 @@ namespace Blog.Controllers
 
                 article.Title = model.Title;
                 article.Content = model.Content;
+
                 if (model.ArticlePicture is not null)
                 {
-                    article.ArticlePicture = _fileManager.GetUniqueNameAndSavePhotoToDisk(model.ArticlePicture);
-                    _fileManager.RemoveImageFromDisk(model.ArticlePictureName);
+                    article.ArticlePicture = model.ArticlePicture.GetUniqueNameAndSavePhotoToDisk(_webHostEnvironment);
+                    FileManager.RemoveImageFromDisk(model.ArticlePictureName, _webHostEnvironment);
                 }
 
                 _context.SaveChanges();
@@ -108,7 +108,7 @@ namespace Blog.Controllers
             {
                 _context.Articles.Remove(article);
                 _context.SaveChanges();
-                _fileManager.RemoveImageFromDisk(article.ArticlePicture);
+                FileManager.RemoveImageFromDisk(article.ArticlePicture, _webHostEnvironment);
                 TempData["message"] = "Delete completed";
             }
             else

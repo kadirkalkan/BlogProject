@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -8,15 +9,9 @@ using System.Threading.Tasks;
 
 namespace Blog.Managers
 {
-    public class FileManager
+    public static class FileManager
     {
-        private readonly IWebHostEnvironment _webHostEnvironment;
-        public FileManager(IWebHostEnvironment webHostEnvironment)
-        {
-            _webHostEnvironment = webHostEnvironment;
-        }
-
-        public string GetUniqueNameAndSavePhotoToDisk(IFormFile pictureFile)
+        public static string GetUniqueNameAndSavePhotoToDisk(this IFormFile pictureFile, IWebHostEnvironment webHostEnvironment)
         {
             string uniqueFileName = default;
 
@@ -24,7 +19,7 @@ namespace Blog.Managers
             {
                 uniqueFileName = Guid.NewGuid().ToString() + "_" + pictureFile.FileName;
 
-                string uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "images");
+                string uploadsFolder = Path.Combine(webHostEnvironment.WebRootPath, "images");
                 string filePath = Path.Combine(uploadsFolder, uniqueFileName);
 
                 using (var fileStream = new FileStream(filePath, FileMode.Create))
@@ -37,11 +32,11 @@ namespace Blog.Managers
         }
 
 
-        public void RemoveImageFromDisk(string imageName)
+        public static void RemoveImageFromDisk(string imageName, IWebHostEnvironment webHostEnvironment)
         {
             if (!string.IsNullOrEmpty(imageName))
             {
-                string uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "images");
+                string uploadsFolder = Path.Combine(webHostEnvironment.WebRootPath, "images");
                 string filePath = Path.Combine(uploadsFolder, imageName);
                 System.IO.File.Delete(filePath);
             }

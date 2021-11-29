@@ -1,7 +1,4 @@
-﻿@* Session'ı Kullanabilmek için IHttpContextAccessor interface'ini inject ediyoruz ve sonrasında Session Class'ının GetString Extension Methodunu Çağırmak İçinde AspNetCore.Http Kütüphanesini using ile ekliyoruz. *@
-@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
-
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -31,13 +28,13 @@
 
                     </ul>
                     <ul class="navbar-nav">
-                        @if (HttpContextAccessor.HttpContext.Session.GetString("username") != null)
+                        @if (Context.Session.GetString("username") != null)
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Profile" asp-route-username="@HttpContextAccessor.HttpContext.Session.GetString("username")">Profile</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Profile" asp-route-username="@Context.Session.GetString("username")">Profile</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Auth" asp-action="LogOut">Log Out (@HttpContextAccessor.HttpContext.Session.GetString("username"))</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Auth" asp-action="LogOut">Log Out (@Context.Session.GetString("username"))</a>
                             </li>
                         }
                         else

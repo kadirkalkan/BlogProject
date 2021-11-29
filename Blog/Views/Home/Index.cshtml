@@ -1,6 +1,4 @@
-﻿@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
-
-@model List<ArticleViewModel>
+﻿@model List<ArticleViewModel>
 @{
     ViewData["Title"] = "Home Page";
 }
@@ -18,7 +16,7 @@
         <div class="text-danger">@TempData["error"]</div>
     }
 
-    @if (!string.IsNullOrEmpty(HttpContextAccessor.HttpContext.Session.GetString("userId")))
+    @if (!string.IsNullOrEmpty(Context.Session.GetString("userId")))
     {
         <div style="float:right"><a class="btn btn-success" asp-controller="Article" asp-action="Create" asp-route-yonlen="/Home/Index">Yeni</a></div>
     }
@@ -53,7 +51,7 @@
                     <div class="row float-right"><b>Created At : </b> &nbsp; @article.GetCreatedTime() </div>
                     <br />
                     <div class="row float-right mt-5 mr-4">
-                        @if (article.AuthorId.ToString().Equals(HttpContextAccessor.HttpContext.Session.GetString("userId")))
+                        @if (article.AuthorId.ToString().Equals(Context.Session.GetString("userId")))
                         {
                             <a class="btn btn-sm btn-warning" asp-controller="Article" asp-action="Edit" asp-route-id="@article.Id"><i class="far fa-edit"></i></a>
                             <a class="btn btn-sm btn-danger ml-2" asp-controller="Article" asp-action="Delete" asp-route-id="@article.Id"><i class="fas fa-ban"></i></a>
